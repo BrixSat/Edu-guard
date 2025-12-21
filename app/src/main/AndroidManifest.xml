@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Internet + Foreground Services -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_USAGE_STATS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MANAGE_DEVICE_ADMINS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.BIND_DEVICE_ADMIN"
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- Usage Access -->
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- Accessibility -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <application
+        android:usesCleartextTraffic="true"
+        android:name=".EduGuardApp"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.EduGuard">
+
+        <!-- Launcher Activity (Login Screen) -->
+        <activity
+            android:name=".ui.auth.LoginActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+        </activity>
+
+
+        <!-- Other activities (admin, mentor, student) -->
+        <activity android:name=".ui.admin.AdminMainActivity" />
+        <activity android:name=".ui.mentor.MentorMainActivity" />
+        <activity android:name=".ui.student.StudentMainActivity" />
+        <activity android:name=".ui.common.SettingsActivity"/>
+        <activity android:name=".ui.admin.AddStudentActivity"/>
+        <activity android:name=".ui.admin.activities.AssignStudentsActivity"/>
+        <activity android:name=".ui.admin.activities.AddMentorActivity"/>
+        <activity android:name=".ui.admin.activities.EditMentorActivity"/>
+        <activity android:name=".ui.admin.AssignMentorActivity"/>
+        <activity android:name=".ui.admin.EditStudentActivity"/>
+
+
+        <receiver
+            android:name=".mdm.EduGuardDeviceAdminReceiver"
+            android:exported="true"
+            android:label="EduGuard Admin"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin_receiver" />
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".mdm.WhitelistReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="edu_guard.APPLY_WHITELIST" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".mdm.SleepReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="edu_guard.SLEEP_START" />
+                <action android:name="edu_guard.SLEEP_END" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".accessibility.AppBlockAccessibilityService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:exported="false">
+
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_config"/>
+        </service>
+
+
+        <activity
+            android:name=".ui.sleep.SleepModeActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:taskAffinity=""
+            android:launchMode="singleTask" />
+
+        <activity
+            android:name=".ui.block.BlockedOverlayActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:taskAffinity=""
+            android:launchMode="singleTask" />
+
+
+
+
+
+    </application>
+
+</manifest>
