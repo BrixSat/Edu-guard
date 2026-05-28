@@ -27,7 +27,7 @@ EduGuard is an Android-based student monitoring and device control application d
 
 ## Setup Instructions
 1. Clone the repository:
-   git clone https://github.com/your-username/EduGuard.git
+   git clone https://github.com/Rohitrrr384/Edu-guard.git
 
 2. Open the project in Android Studio.
 
