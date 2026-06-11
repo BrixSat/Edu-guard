@@ -54,7 +54,9 @@ public class RetrofitClient {
                 .addInterceptor(logging)
                 .addInterceptor(chain -> {
                     Request request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token)
+                            // .header() replaces any existing Authorization header so the
+                            // token is never sent twice (a duplicated header breaks auth).
+                            .header("Authorization", "Bearer " + token)
                             .build();
                     return chain.proceed(request);
                 })

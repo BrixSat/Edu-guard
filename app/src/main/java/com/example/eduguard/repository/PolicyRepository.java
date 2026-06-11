@@ -37,7 +37,7 @@ public class PolicyRepository {
                             MutableLiveData<Policy> result,
                             MutableLiveData<String> error) {
 
-        apiService.getPolicy(studentId, bearer()).enqueue(new Callback<Policy>() {
+        apiService.getPolicy(bearer(), studentId).enqueue(new Callback<Policy>() {
             @Override
             public void onResponse(Call<Policy> call, Response<Policy> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -61,7 +61,7 @@ public class PolicyRepository {
                              MutableLiveData<Boolean> result,
                              MutableLiveData<String> error) {
 
-        apiService.updatePolicy(studentId, bearer(), policy)
+        apiService.updatePolicy(bearer(), studentId, policy)
                 .enqueue(new Callback<Policy>() {
                     @Override
                     public void onResponse(Call<Policy> call, Response<Policy> response) {

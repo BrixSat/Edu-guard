@@ -124,7 +124,7 @@ public class RequestRepository {
     // Fetch POLICY (student device sync)
     // ---------------------------------------------------------
     public void fetchPolicy(String studentId, PolicyCallback cb) {
-        api.getPolicy(studentId, getBearer())
+        api.getPolicy(getBearer(), studentId)
                 .enqueue(new Callback<Policy>() {
                     @Override
                     public void onResponse(Call<Policy> call, Response<Policy> resp) {

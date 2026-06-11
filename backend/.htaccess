@@ -1,0 +1,21 @@
+# Use this ONLY when Apache's DocumentRoot points at the backend/ project root
+# instead of backend/public/. It forwards all traffic into public/ and blocks
+# direct web access to source, config, and the database.
+#
+# Preferred setup: point DocumentRoot at backend/public/ and delete this file —
+# then only public/.htaccess is needed.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Don't rewrite requests that already target the public/ directory.
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# Defense in depth: refuse direct HTTP access to non-public folders.
+RewriteRule ^(src|config|storage)(/.*)?$ - [F,L]
+
+<FilesMatch "\.(sqlite|sql|md)$">
+    Require all denied
+</FilesMatch>

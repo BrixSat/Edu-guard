@@ -1,0 +1,21 @@
+# Apache deployment config. Not needed when running with `php -S`.
+
+# Pass the Authorization header through to PHP. Required because this server
+# runs PHP via CGI/FPM, which strips it by default (so Bearer tokens vanish).
+# CGIPassAuth works on Apache 2.4.13+; the RewriteRule is a fallback for older
+# versions (PHP then reads $_SERVER['REDIRECT_HTTP_AUTHORIZATION']).
+<IfModule mod_cgi.c>
+    CGIPassAuth On
+</IfModule>
+<IfModule mod_cgid.c>
+    CGIPassAuth On
+</IfModule>
+
+# Route every request that isn't a real file/dir through the front controller.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>
